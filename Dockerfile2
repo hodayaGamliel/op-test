@@ -1,0 +1,21 @@
+FROM java:7
+MAINTAINER David Levanon "david.levanon@takipi.com"
+RUN update-ca-certificates -f
+
+ARG backend_url
+ARG secret_key
+
+# Setup Takipi
+ENV TAKIPI_HEAP_SIZE 120m
+ENV TAKIPI_HOME    /opt/takipi
+ENV PATH $PATH:/opt/takipi/bin
+ENV JAVA_TOOL_OPTIONS -agentlib:TakipiAgent
+WORKDIR /tmp
+RUN wget -O takipi-installer.sh "http://$backend_url:8080/app/download?t=inst" && chmod +x takipi-installer.sh
+RUN ./takipi-installer.sh -i --sk=$secret_key --s3_url http://$backend_url:8080/service/png --installer_url "http://$backend_url:8080/app/download?t=t4c-tgz" --base_url http://$backend_url:8080/
+
+# Setup Agent
+RUN mkdir ~/test
+WORKDIR ~/test
+RUN wget http://david.sparktale.s3.amazonaws.com/tester2.jar
+CMD java -cp tester2.jar helpers.Main 10000000 5000
