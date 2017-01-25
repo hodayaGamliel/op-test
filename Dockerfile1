@@ -1,9 +1,11 @@
-FROM java:7
+FROM java:8
 MAINTAINER David Levanon "david.levanon@takipi.com"
 RUN update-ca-certificates -f
 
+
 ARG backend_url
 ARG secret_key
+
 
 # Setup Takipi
 ENV TAKIPI_HEAP_SIZE 120m
@@ -11,11 +13,35 @@ ENV TAKIPI_HOME    /opt/takipi
 ENV PATH $PATH:/opt/takipi/bin
 ENV JAVA_TOOL_OPTIONS -agentlib:TakipiAgent
 WORKDIR /tmp
-RUN wget -O takipi-installer.sh "http://$backend_url:8080/app/download?t=inst" && chmod +x takipi-installer.sh
-RUN ./takipi-installer.sh -i --sk=$secret_key --s3_url http://$backend_url:8080/service/png --installer_url "http://$backend_url:8080/app/download?t=t4c-tgz" --base_url http://$backend_url:8080/
 
-# Setup Agent
-RUN mkdir ~/test
+RUN wget -O takipi-installer.sh "http://$backend_url/app/download?t=t4c-inst" && chmod +x takipi-installer.sh
+RUN ./takipi-installer.sh -i --sk=$secret_key --s3_url http://$backend_url/service/png --installer_url "http://$backend_url/app/download?t=t4c-tgz" --base_url http://$backend_url/
+RUN sed -i "s/\(baseUrl=\).*\$/\1http:\/\/$backend_url\//" /opt/takipi/takipi.properties
+RUN service takipi stop
+RUN service takipi start
+
+
+RUN echo "#!/bin/bash" > /opt/run5.sh
+RUN echo "/opt/run-test.sh" >> /opt/run5.sh
+#RUN echo "/opt/run-test.sh" >> /opt/run5.sh
+#RUN echo "/opt/run-test.sh" >> /opt/run5.sh
+#RUN echo "/opt/run-test.sh" >> /opt/run5.sh
+#RUN echo "/opt/run-test.sh" >> /opt/run5.sh
+RUN chmod +x /opt/run5.sh
+
+
+RUN echo "#!/bin/bash" > /opt/run-test.sh
+RUN echo "nohup java -cp tester.jar helpers.Main 10000000 5000 &" >> /opt/run-test.sh
+RUN chmod +x /opt/run-test.sh
+
+
 WORKDIR ~/test
-RUN wget http://david.sparktale.s3.amazonaws.com/tester1.jar
-CMD java -cp tester1.jar helpers.Main 10000000 5000
+RUN wget https://s3.amazonaws.com/hodaya/op-testers/v-4+/tester.jar
+CMD export MACHINE_NAME=`cat /dev/urandom | tr -cd 'a-f0-9' | head -c 20 ; echo` && \
+    /opt/takipi/etc/takipi-setup-machine-name $MACHINE_NAME && \
+   /opt/run5.sh && \
+    while true; do sleep 10; done
+#    java -cp tester1.jar helpers.Main 10000000 5000
+
+
+

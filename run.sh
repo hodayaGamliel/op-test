@@ -1,22 +1,7 @@
 #!/bin/bash 
 
-nohup docker run -t david1 &
-nohup docker run -t david1 &
-nohup docker run -t david1 &
-nohup docker run -t david1 &
-nohup docker run -t david1 &
-nohup docker run -t david2 &
-nohup docker run -t david2 &
-nohup docker run -t david2 &
-nohup docker run -t david2 &
-nohup docker run -t david2 &
-nohup docker run -t david3 &
-nohup docker run -t david3 &
-nohup docker run -t david3 &
-nohup docker run -t david3 &
-nohup docker run -t david3 &
-nohup docker run -t david4 &
-nohup docker run -t david4 &
-nohup docker run -t david4 &
-nohup docker run -t david4 &
-nohup docker run -t david4 &
+for i in `seq 1 10`;
+do
+	/home/ubuntu/v4-op/run1.sh	
+done 
+
